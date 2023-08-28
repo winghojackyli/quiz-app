@@ -59,7 +59,6 @@ const OpenEnded = ({ game }: Props) => {
 
   const handleNext = useCallback(() => {
     if (isChecking) return;
-    console.log(blankAnswer);
     checkAnswer(undefined, {
       onSuccess: ({ percentageSimilar }) => {
         toast({
@@ -126,10 +125,6 @@ const OpenEnded = ({ game }: Props) => {
             {formatTimeDelta(differenceInSeconds(now, game.timeStarted))}
           </div>
         </div>
-        {/* <MCQCounter
-          correctAnswers={correctAnswers}
-          wrongAnswers={wrongAnswers}
-        /> */}
       </div>
       <Card className="w-full mt-4">
         <CardHeader className="flex flex-row items-center">

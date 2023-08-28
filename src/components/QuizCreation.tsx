@@ -25,16 +25,20 @@ import { Input } from "@/components/ui/input";
 import { BookOpen, CopyCheck } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import LoadingQuestions from "./LoadingQuestions";
+import { useToast } from "./ui/use-toast";
 
-type Props = {};
+type Props = {
+  topicParam: string;
+};
 
 type Input = z.infer<typeof quizCreationSchema>;
 
-const QuizCreation = (props: Props) => {
+const QuizCreation = ({ topicParam }: Props) => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const [showLoader, setShowLoader] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -54,7 +58,7 @@ const QuizCreation = (props: Props) => {
     resolver: zodResolver(quizCreationSchema),
     defaultValues: {
       amount: 3,
-      topic: "",
+      topic: topicParam,
       type: "open_ended",
     },
   });
@@ -68,18 +72,27 @@ const QuizCreation = (props: Props) => {
         type: input.type,
       },
       {
-        onSuccess: ({ gameId }) => {
+        onSuccess: ({ gameId }: { gameId: string }) => {
           setFinished(true);
           setTimeout(() => {
             if (form.getValues("type") === "mcq") {
               router.push(`/play/mcq/${gameId}`);
-            } else {
+            } else if (form.getValues("type") === "open_ended") {
               router.push(`/play/open-ended/${gameId}`);
             }
-          }, 1000);
+          }, 2000);
         },
-        onError: () => {
+        onError: (error) => {
           setShowLoader(false);
+          if (error instanceof AxiosError) {
+            if (error.response?.status === 500) {
+              toast({
+                title: "Error",
+                description: "Something went wrong. Please try again later.",
+                variant: "destructive",
+              });
+            }
+          }
         },
       }
     );
@@ -87,11 +100,13 @@ const QuizCreation = (props: Props) => {
 
   form.watch();
 
-  if (showLoader) return <LoadingQuestions finished={finished} />;
+  if (showLoader) {
+    return <LoadingQuestions finished={finished} />;
+  }
 
   return (
     <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-      <Card>
+      <Card className="w-[510px]">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Quiz Creation</CardTitle>
           <CardDescription>Choose a topic</CardDescription>
@@ -108,7 +123,10 @@ const QuizCreation = (props: Props) => {
                     <FormControl>
                       <Input placeholder="Enter a topic..." {...field} />
                     </FormControl>
-                    <FormDescription>Please provide a topic</FormDescription>
+                    <FormDescription>
+                      Please provide any topic you would like to be quizzed on
+                      here.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -131,6 +149,10 @@ const QuizCreation = (props: Props) => {
                         }}
                       />
                     </FormControl>
+                    <FormDescription>
+                      You can choose how many questions you would like to be
+                      quizzed on here.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
