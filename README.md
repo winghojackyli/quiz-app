@@ -35,4 +35,4 @@ Welcome to Quiz App, a dynamic Next.js 13 application that takes the quiz experi
 
 ## Live Demo
 
-Experience the Quiz App live on [Vercel](https://quiz-app-ten-beryl.vercel.app).
+Experience the Quiz App live on [Vercel](https://quiz-app-winghojackyli.vercel.app).
