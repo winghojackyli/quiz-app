@@ -2,7 +2,7 @@
 
 Welcome to Quiz App, a dynamic Next.js 13 application that takes the quiz experience to the next level! Powered by the OpenAI API, this app lets you dive into quizzes tailored to your chosen topics. Whether you're tired of mundane questionnaires or seeking an extraordinary challenge, Quiz App has you covered. 
 
-![demo](https://github.com/winghojackyli/quiz-app/assets/108389005/4e0ddd9a-1d59-4d05-bc38-bc76be91d2b3)
+![quiz-app-winghojackyli vercel app_dashboard](https://github.com/winghojackyli/quiz-app/assets/108389005/ab1460f4-4b89-489d-af5d-0691d2dcf646)
 
 
 ## Features
